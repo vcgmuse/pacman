@@ -14,8 +14,8 @@ let world = [
   [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ];
 let cherryObject = {
-  x: Math.floor(Math.random() * world.length-1),
-  y: Math.floor(Math.random() * world[0].length-1),
+  x: Math.floor(Math.random() * world.length - 1),
+  y: Math.floor(Math.random() * world[0].length - 1),
 };
 let pacmanObject = {
   x: 1,
@@ -25,8 +25,8 @@ let ghostObj = {
   x: 5,
   y: 1,
   direction: 'right',
-  ghostSpeed:1,
-  moves: ['right', 'left', 'up', 'down']
+  ghostSpeed: 1,
+  moves: ['right', 'left', 'up', 'down'],
 };
 let cherry = document.getElementById('cherry');
 cherry.style.left = `${cherryObject.x * 50}px`;
@@ -103,8 +103,10 @@ function collisionWithWall(element, id, elementX, elementY) {
     element.y = tempY;
     displayPacman();
     console.log(id, 'Ran into Wall');
-    return true
-  } else {return false}
+    return true;
+  } else {
+    return false;
+  }
 }
 function collisionWithCoin(element, id) {
   if (world[element.y][element.x] === 1) {
@@ -126,7 +128,12 @@ function collisionWithFruit(element, id) {
     console.log(id, 'Ate a Cherry');
   }
 }
-function collisionWithGhost(elementOne, elementOneId, elementTwo, elementTwoId) {
+function collisionWithGhost(
+  elementOne,
+  elementOneId,
+  elementTwo,
+  elementTwoId
+) {
   if (elementOne.y === elementTwo.y && element.x === elementTwo.x) {
     let element = document.getElementById(`${elementOneId}`);
     element.remove();
@@ -140,10 +147,12 @@ setInterval(moveGhost, 500);
 function moveGhost() {
   let tempX = ghostObj.x;
   let tempY = ghostObj.y;
-  let corners = [(world[ghostObj.y+1][ghostObj.x]!==2), 
-                (world[ghostObj.y-1][ghostObj.x]!==2), 
-                (world[ghostObj.y][ghostObj.x+1]!==2), 
-                (world[ghostObj.y][ghostObj.x-1]!==2)]  
+  let corners = [
+    world[ghostObj.y + 1][ghostObj.x] !== 2,
+    world[ghostObj.y - 1][ghostObj.x] !== 2,
+    world[ghostObj.y][ghostObj.x + 1] !== 2,
+    world[ghostObj.y][ghostObj.x - 1] !== 2,
+  ];
   switch (ghostObj.direction) {
     case 'right':
       ghostObj.x += ghostObj.ghostSpeed;
@@ -158,23 +167,23 @@ function moveGhost() {
       ghostObj.y += ghostObj.ghostSpeed;
       break;
   }
-  
+  let collision = ghostCollision(tempX, tempY);
+
   let cornerCount = 0;
-  corners.forEach((direction)=>{
-    if(direction){
-      cornerCount ++;
+  corners.forEach((direction) => {
+    if (direction) {
+      cornerCount++;
     }
-  })
-  if(ghostCollision(tempX, tempY) || cornerCount > 2){
-    console.log('Making a Choice')
+  });
+  if (collision || cornerCount > 2) {
+    console.log('Making a Choice');
     let randomDirection = Math.floor(Math.random() * 4);
-    console.log(randomDirection)
-    ghostObj.direction = moves[3];
+    console.log(randomDirection);
+    ghostObj.direction = ghostObj.moves[randomDirection];
   }
   cornerCount = 0;
   displayGhost();
 }
-
 
 document.addEventListener('keydown', (e) => {
   let tempX = pacmanObject.x;
