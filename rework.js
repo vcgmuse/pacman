@@ -22,11 +22,10 @@ let pacmanObject = {
   y: 1,
 };
 let ghostObj = {
-  x: 5,
+  x: 4,
   y: 1,
   direction: 'right',
   ghostSpeed: 1,
-  moves: ['right', 'left', 'up', 'down'],
 };
 let cherry = document.getElementById('cherry');
 cherry.style.left = `${cherryObject.x * 50}px`;
@@ -101,7 +100,6 @@ function collisionWithWall(element, id, elementX, elementY) {
   if (world[element.y][element.x] === 2) {
     element.x = tempX;
     element.y = tempY;
-    displayPacman();
     console.log(id, 'Ran into Wall');
     return true;
   } else {
@@ -142,47 +140,53 @@ function collisionWithGhost(
     console.log('Lost a Life');
   }
 }
-setInterval(moveGhost, 500);
+setInterval(moveGhost, 200);
 
 function moveGhost() {
-  let tempX = ghostObj.x;
-  let tempY = ghostObj.y;
-  let corners = [
-    world[ghostObj.y + 1][ghostObj.x] !== 2,
-    world[ghostObj.y - 1][ghostObj.x] !== 2,
-    world[ghostObj.y][ghostObj.x + 1] !== 2,
-    world[ghostObj.y][ghostObj.x - 1] !== 2,
-  ];
-  switch (ghostObj.direction) {
-    case 'right':
-      ghostObj.x += ghostObj.ghostSpeed;
-      break;
-    case 'left':
-      ghostObj.x -= ghostObj.ghostSpeed;
-      break;
-    case 'up':
-      ghostObj.y -= ghostObj.ghostSpeed;
-      break;
-    case 'down':
-      ghostObj.y += ghostObj.ghostSpeed;
-      break;
-  }
-  let collision = ghostCollision(tempX, tempY);
-
+  displayGhost();
+  let corners = {
+    down: [world[ghostObj.y + 1][ghostObj.x] !== 2, 'down'],
+    up: [world[ghostObj.y - 1][ghostObj.x] !== 2, 'up'],
+    right: [world[ghostObj.y][ghostObj.x + 1] !== 2, 'right'],
+    left: [world[ghostObj.y][ghostObj.x - 1] !== 2, 'left'],
+  };
+  let directions = [];
   let cornerCount = 0;
-  corners.forEach((direction) => {
-    if (direction) {
+  for (direction in corners) {
+    if (corners[direction][0] === true) {
+      directions.push(corners[direction][1]);
       cornerCount++;
     }
-  });
-  if (collision || cornerCount > 2) {
-    console.log('Making a Choice');
-    let randomDirection = Math.floor(Math.random() * 4);
-    console.log(randomDirection);
-    ghostObj.direction = ghostObj.moves[randomDirection];
+  }
+  console.log(cornerCount);
+  if (cornerCount > 2) {
+    let randomDirection = Math.floor(
+      Math.floor(Math.random() * directions.length)
+    );
+    ghostObj.direction = directions[randomDirection];
+  }
+  if (corners[ghostObj.direction][0]) {
+    switch (ghostObj.direction) {
+      case 'right':
+        ghostObj.x += ghostObj.ghostSpeed;
+        break;
+      case 'left':
+        ghostObj.x -= ghostObj.ghostSpeed;
+        break;
+      case 'up':
+        ghostObj.y -= ghostObj.ghostSpeed;
+        break;
+      case 'down':
+        ghostObj.y += ghostObj.ghostSpeed;
+        break;
+    }
+  } else {
+    let randomDirection = Math.floor(
+      Math.floor(Math.random() * directions.length)
+    );
+    ghostObj.direction = directions[randomDirection];
   }
   cornerCount = 0;
-  displayGhost();
 }
 
 document.addEventListener('keydown', (e) => {
