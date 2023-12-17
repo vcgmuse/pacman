@@ -1,19 +1,51 @@
 let world = [
   [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-  [2, 0, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2],
-  [2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2],
-  [2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2],
-  [2, 2, 1, 2, 1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 2],
-  [2, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2],
-  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+  [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
+  [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 2, 2, 2, 2, 2],
+  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 0, 0, 2, 1, 1, 1, 2],
+  [2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2],
+  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2],
+  [2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2],
+  [2, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2],
+  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2],
+  [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 2],
+  [2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2],
+  [2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2],
+  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ];
+
+let cherryObject = {
+  id: 'fruit',
+  x: 5,
+  y: 1,
+  direction: 'right',
+  speed: 1,
+};
+
+let pacmanObject = {
+  id: 'pacman',
+  x: 1,
+  y: 1,
+};
+
+let ghostObj = {
+  id: 'ghost',
+  x: 4,
+  y: 1,
+  direction: 'right',
+  speed: 1,
+};
+let cherry = document.getElementById('cherry');
+let objectArray = [];
+let score = 0;
+let lives = 3;
+
+cherry.style.left = `${cherryObject.x * 50}px`;
+cherry.style.top = `${cherryObject.y * 50}px`;
+objectArray.push(cherry);
 
 function displayWorld() {
   let output = '';
@@ -30,27 +62,12 @@ function displayWorld() {
     }
     output += '</div>';
   }
-  //   console.log(output);
   document.getElementById('world').innerHTML = output;
 }
-let score = 0;
-let lives = 3;
-let cherries = {
-  x: 5,
-  y: 1
-}
-let pacmanObject = {
-  x: 1,
-  y: 1,
-};
-let ghostObj = {
-  x: 1,
-  y: 1,
-};
 
-function displayGhost(){
+function displayGhost() {
   let ghost = document.getElementById('ghost');
-  ghost.style.display = 'inline-block'
+  ghost.style.display = 'inline-block';
   ghost.style.left = `${ghostObj.x * 50}px`;
   ghost.style.top = `${ghostObj.y * 50}px`;
 }
@@ -59,96 +76,160 @@ function displayPacman() {
   pacman.style.left = `${pacmanObject.x * 50}px`;
   pacman.style.top = `${pacmanObject.y * 50}px`;
 }
-function displayCherry(){
+function displayCherry() {
   let cherry = document.getElementById('cherry');
-  cherry.style.left = `${cherry.x * 50}px`;
-  cherry.style.top = `${cherry.y * 50}px`;
+  cherry.style.left = `${cherryObject.x * 50}px`;
+  cherry.style.top = `${cherryObject.y * 50}px`;
 }
-let cherry =  document.getElementById('cherry');
 
-cherry.style.left = `${cherries.x*50}px`;
-cherry.style.top = `${cherries.y*50}px`;
-let objectArray = [];
-objectArray.push(cherry)
-function displayLives(){
+function displayLives() {
   document.getElementById('lives').textContent = lives;
-
 }
 function displayScore() {
   document.getElementById('score').textContent = score;
- 
-    if(score > 350 && objectArray.includes(cherry)){
-      cherry.style.display = 'inline-block'
-      objectArray.pop();
-      displayGhost();
-    }
+  if (score > 10 && objectArray.includes(cherry)) {
+    cherry.style.display = 'inline-block';
+    objectArray.pop();
+    displayGhost();
+  }
+}
+function pacmanCollision(elementX, elementY) {
+  let pacman = document.getElementById('pacman');
+  collisionWithWall(pacmanObject, pacman.id, elementX, elementY);
+  collisionWithFruit(pacmanObject, pacman.id);
+  collisionWithCoin(pacmanObject, pacman.id);
+  collisionWithGhost(pacmanObject, pacman.id, elementX, elementY);
 }
 
-displayWorld();
-displayPacman();
-setInterval(moveGhost,200);
-function moveGhost(){
-  let tempX = ghostObj.x;
-  let tempY = ghostObj.y;
-  let upAndDown = world[ghostObj.y+1][ghostObj.x]!== 2 || world[ghostObj.y-1][ghostObj.x]!==2;
-  let lefAndRight = world[ghostObj.y][ghostObj.x+1]!== 2 || world[ghostObj.y][ghostObj.x-1]!==2;
-  if(upAndDown || lefAndRight){
-    ghostObj.x += Math.floor(Math.random() * 3) - 1;
-    ghostObj.y += Math.floor(Math.random() * 3) - 1;
-  }
-  console.log(ghostObj.x, ghostObj.y)
-  if (world[ghostObj.y][ghostObj.x] === 2) {
-    ghostObj.x = tempX;
-    ghostObj.y = tempY;
-    displayGhost();  
-    console.log('world', world[ghostObj.y][ghostObj.x]);
-    console.log('collision', pacmanObject.x, pacmanObject.y);
-  }
-  displayGhost();
-  
+function ghostCollision(elementX, elementY) {
+  let ghost = document.getElementById('ghost');
+  return collisionWithWall(ghostObj, ghost.id, elementX, elementY);
 }
-document.addEventListener('keydown', (e) => {
-  let tempX = pacmanObject.x;
-  let tempY = pacmanObject.y;
-  if (e.key === 'ArrowLeft') {
-    pacman.style.transform = 'rotate(180deg)';
-    pacmanObject.x--;
-  } else if (e.key === 'ArrowRight') {
-    pacman.style.transform = 'rotate(0deg)';
-    pacmanObject.x++;
-  } else if (e.key === 'ArrowUp') {
-    pacman.style.transform = 'rotate(270deg)';
-    pacmanObject.y--;
-  } else if (e.key === 'ArrowDown') {
-    pacman.style.transform = 'rotate(90deg)';
-    pacmanObject.y++;
+
+function collisionWithWall(element, id, elementX, elementY) {
+  let tempX = elementX;
+  let tempY = elementY;
+  if (world[element.y][element.x] === 2) {
+    element.x = tempX;
+    element.y = tempY;
+    console.log(id, 'Ran into Wall');
+    return true;
+  } else {
+    return false;
   }
-  if (world[pacmanObject.y][pacmanObject.x] === 2) {
-    pacmanObject.x = tempX;
-    pacmanObject.y = tempY;
-    displayPacman();  
-    console.log('world', world[pacmanObject.y][pacmanObject.x]);
-    console.log('collision', pacmanObject.x, pacmanObject.y);
-  }
-  if(pacmanObject.y === cherries.y && pacmanObject.x === cherries.x){
-    let element = document.getElementById('cherry');
-    element.remove();
-    score += 50;
-    console.log('Over Each Other')
-  }
-  if(pacmanObject.y === ghostObj.y && pacmanObject.x === ghostObj.x){
-    let element = document.getElementById('pacman');
-    element.remove();
-    lives--;
-    displayLives();
-    console.log('Lost a Life')
-  }
-  console.log(world[pacmanObject.y][pacmanObject.x]);
-  if (world[pacmanObject.y][pacmanObject.x] === 1) {
-    world[pacmanObject.y][pacmanObject.x] = 0;
+}
+function collisionWithCoin(element, id) {
+  if (world[element.y][element.x] === 1) {
+    world[element.y][element.x] = 0;
     score += 10;
     displayWorld();
     displayScore();
+    console.log(id, 'Ate a Coin');
   }
-  displayPacman();
-});
+}
+function collisionWithFruit(element, id) {
+  if (element.y === cherryObject.y && element.x === cherryObject.x) {
+    cherryObject.y = undefined;
+    cherryObject.x = undefined;
+    let object = document.getElementById(`cherry`);
+    object.remove();
+    object.style.display = 'none';
+    score += 50;
+    console.log(id, 'Ate a Cherry');
+  }
+}
+function collisionWithGhost(
+  elementOne,
+  elementOneId,
+  elementTwo,
+  elementTwoId
+) {
+  if (elementOne.y === elementTwo.y && element.x === elementTwo.x) {
+    let element = document.getElementById(`${elementOneId}`);
+    element.remove();
+    lives--;
+    displayLives();
+    console.log('Lost a Life');
+  }
+}
+let movingObject = [];
+movingObject.push(ghostObj);
+// movingObject.push(cherryObject);
+setInterval(() => moveObject(movingObject), 300);
+
+function moveObject(object) {
+ 
+  for (objectInstance of object) {
+    let directions = [];
+    let cornerCount = 0;
+    switch (objectInstance.id) {
+      case 'ghost':
+        displayGhost();
+        break;
+      case 'pacman':
+        displayPacman();
+        break;
+      case 'fruit':
+        displayCherry();
+        break;
+    }
+      let corners = [
+        [world[objectInstance.y + 1][objectInstance.x] !== 2, 'down'],
+        [world[objectInstance.y - 1][objectInstance.x] !== 2, 'up'],
+        [world[objectInstance.y][objectInstance.x + 1] !== 2, 'right'],
+        [world[objectInstance.y][objectInstance.x - 1] !== 2, 'left'],
+      ];
+
+      for (let direction of corners) {
+        if (direction[0] === true) {
+          directions.push(direction[1]);
+          cornerCount++;
+        }
+      }
+      console.log(directions)
+      if (!directions.includes(objectInstance.direction)) {
+        let randomDirection = Math.floor(Math.random() * directions.length);
+        console.log(directions.length)
+        objectInstance.direction = directions[randomDirection];
+      }
+      switch (objectInstance.direction) {
+        case 'right':
+          objectInstance.x += objectInstance.speed;
+          break;
+        case 'left':
+          objectInstance.x -= objectInstance.speed;
+          break;
+        case 'up':
+          objectInstance.y -= objectInstance.speed;
+          break;
+        case 'down':
+          objectInstance.y += objectInstance.speed;
+          break;
+      }
+      cornerCount = 0;
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    let tempX = pacmanObject.x;
+    let tempY = pacmanObject.y;
+    if (e.key === 'ArrowLeft') {
+      pacman.style.transform = 'rotate(180deg)';
+      pacmanObject.x--;
+    } else if (e.key === 'ArrowRight') {
+      pacman.style.transform = 'rotate(0deg)';
+      pacmanObject.x++;
+    } else if (e.key === 'ArrowUp') {
+      pacman.style.transform = 'rotate(270deg)';
+      pacmanObject.y--;
+    } else if (e.key === 'ArrowDown') {
+      pacman.style.transform = 'rotate(90deg)';
+      pacmanObject.y++;
+    }
+    pacmanCollision(tempX, tempY);
+    console.log(world[pacmanObject.y][pacmanObject.x]);
+    displayPacman();
+  });
+
+displayWorld();
+displayPacman();

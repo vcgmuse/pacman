@@ -28,7 +28,6 @@ div.row div {
 div.brick {
     background-color: blue;
 }
-div.empty{}
 div.coin {
     background: url('./images/coin.png');
     background-size: contain;
@@ -53,6 +52,7 @@ div#ghost{
     position: absolute;
     top: 0px;
     left: 0px;
+    transition: all 300ms linear;
 }
 div#cherry{
     display: none;
