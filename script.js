@@ -1,20 +1,11 @@
 let world = [
-  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-  [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2],
+  [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
   [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
   [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
-  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 2, 2, 2, 2, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 0, 0, 2, 1, 1, 1, 2],
-  [2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2],
-  [2, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2],
-  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
-  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ];
 
 let cherryObject = {
@@ -37,6 +28,7 @@ let ghostObj = {
   y: 1,
   direction: 'right',
   speed: 1,
+  collision: false,
 };
 let cherry = document.getElementById('cherry');
 let objectArray = [];
@@ -152,13 +144,16 @@ function collisionWithGhost(
     console.log('Lost a Life');
   }
 }
+
 let movingObject = [];
 movingObject.push(ghostObj);
-// movingObject.push(cherryObject);
+movingObject.push(ghostObj);
+movingObject.push(cherryObject);
 setInterval(() => moveObject(movingObject), 300);
-
+function checkObjectCollision(movingObject){
+  
+}
 function moveObject(object) {
- 
   for (objectInstance of object) {
     let directions = [];
     let cornerCount = 0;
@@ -173,63 +168,63 @@ function moveObject(object) {
         displayCherry();
         break;
     }
-      let corners = [
-        [world[objectInstance.y + 1][objectInstance.x] !== 2, 'down'],
-        [world[objectInstance.y - 1][objectInstance.x] !== 2, 'up'],
-        [world[objectInstance.y][objectInstance.x + 1] !== 2, 'right'],
-        [world[objectInstance.y][objectInstance.x - 1] !== 2, 'left'],
-      ];
+    let corners = [
+      [world[objectInstance.y + 1][objectInstance.x] !== 2, 'down'],
+      [world[objectInstance.y - 1][objectInstance.x] !== 2, 'up'],
+      [world[objectInstance.y][objectInstance.x + 1] !== 2, 'right'],
+      [world[objectInstance.y][objectInstance.x - 1] !== 2, 'left'],
+    ];
 
-      for (let direction of corners) {
-        if (direction[0] === true) {
-          directions.push(direction[1]);
-          cornerCount++;
-        }
+    for (let direction of corners) {
+      if (direction[0] === true) {
+        directions.push(direction[1]);
+        cornerCount++;
       }
-      console.log(directions)
-      if (!directions.includes(objectInstance.direction)) {
-        let randomDirection = Math.floor(Math.random() * directions.length);
-        console.log(directions.length)
-        objectInstance.direction = directions[randomDirection];
-      }
-      switch (objectInstance.direction) {
-        case 'right':
-          objectInstance.x += objectInstance.speed;
-          break;
-        case 'left':
-          objectInstance.x -= objectInstance.speed;
-          break;
-        case 'up':
-          objectInstance.y -= objectInstance.speed;
-          break;
-        case 'down':
-          objectInstance.y += objectInstance.speed;
-          break;
-      }
-      cornerCount = 0;
     }
+    console.log(directions);
+    if (!directions.includes(objectInstance.direction)) {
+      let randomDirection = Math.floor(Math.random() * directions.length);
+      console.log(directions.length);
+      objectInstance.direction = directions[randomDirection];
+    }
+    switch (objectInstance.direction) {
+      case 'right':
+        objectInstance.x += objectInstance.speed;
+        break;
+      case 'left':
+        objectInstance.x -= objectInstance.speed;
+        break;
+      case 'up':
+        objectInstance.y -= objectInstance.speed;
+        break;
+      case 'down':
+        objectInstance.y += objectInstance.speed;
+        break;
+    }
+    cornerCount = 0;
   }
+}
 
-  document.addEventListener('keydown', (e) => {
-    let tempX = pacmanObject.x;
-    let tempY = pacmanObject.y;
-    if (e.key === 'ArrowLeft') {
-      pacman.style.transform = 'rotate(180deg)';
-      pacmanObject.x--;
-    } else if (e.key === 'ArrowRight') {
-      pacman.style.transform = 'rotate(0deg)';
-      pacmanObject.x++;
-    } else if (e.key === 'ArrowUp') {
-      pacman.style.transform = 'rotate(270deg)';
-      pacmanObject.y--;
-    } else if (e.key === 'ArrowDown') {
-      pacman.style.transform = 'rotate(90deg)';
-      pacmanObject.y++;
-    }
-    pacmanCollision(tempX, tempY);
-    console.log(world[pacmanObject.y][pacmanObject.x]);
-    displayPacman();
-  });
+document.addEventListener('keydown', (e) => {
+  let tempX = pacmanObject.x;
+  let tempY = pacmanObject.y;
+  if (e.key === 'ArrowLeft') {
+    pacman.style.transform = 'rotate(180deg)';
+    pacmanObject.x--;
+  } else if (e.key === 'ArrowRight') {
+    pacman.style.transform = 'rotate(0deg)';
+    pacmanObject.x++;
+  } else if (e.key === 'ArrowUp') {
+    pacman.style.transform = 'rotate(270deg)';
+    pacmanObject.y--;
+  } else if (e.key === 'ArrowDown') {
+    pacman.style.transform = 'rotate(90deg)';
+    pacmanObject.y++;
+  }
+  pacmanCollision(tempX, tempY);
+  console.log(world[pacmanObject.y][pacmanObject.x]);
+  displayPacman();
+});
 
 displayWorld();
 displayPacman();

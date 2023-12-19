@@ -1,42 +1,52 @@
 let world = [
-  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-  [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2],
+  [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
   [2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2],
   [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
-  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 0, 0, 2, 2, 2, 2, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 0, 0, 2, 1, 1, 1, 2],
-  [2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 2, 1, 2],
-  [2, 1, 2, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 2, 2, 1, 2],
-  [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 2, 1, 2],
-  [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 2, 1, 2, 1, 2],
-  [2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 1, 1, 1, 2, 2, 1, 2, 2, 1, 2, 1, 1, 1, 2],
-  [2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2],
-  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ];
-let cherryObject = {
-  x: Math.floor(Math.random() * world.length - 1),
-  y: Math.floor(Math.random() * world[0].length - 1),
-};
-let pacmanObject = {
-  x: 1,
-  y: 1,
-};
-let ghostObj = {
-  x: 4,
-  y: 1,
-  direction: 'right',
-  ghostSpeed: 1,
-};
-let cherry = document.getElementById('cherry');
-cherry.style.left = `${cherryObject.x * 50}px`;
-cherry.style.top = `${cherryObject.y * 50}px`;
-let objectArray = [];
-objectArray.push(cherry);
-let score = 0;
-let lives = 3;
+
+class GhostObj {
+  constructor() {
+    this._class = 'ghost';
+    this._x = 4;
+    this._y = 1;
+    this._direction = 'right';
+    this._speed = 1;
+    this._collision = false;
+    this._id = GhostObj.idCounter++;
+  }
+  get id() {
+    return this._id;
+  }
+  get x() {
+    return this._x;
+  }
+  get y() {
+    return this._y;
+  }
+  get direction() {
+    return this._direction;
+  }
+  get speed() {
+    return this._speed;
+  }
+  set x(xPosition) {
+    this._x = xPosition;
+  }
+  set y(yPosition) {
+    this._y = yPosition;
+  }
+  set direction(newDirection) {
+    this._direction = newDirection;
+  }
+  set speed(newSpeed) {
+    this._speed = newSpeed;
+  }
+}
+GhostObj.idCounter = 1;
 
 function displayWorld() {
   let output = '';
@@ -56,162 +66,72 @@ function displayWorld() {
   document.getElementById('world').innerHTML = output;
 }
 
-function displayGhost() {
-  let ghost = document.getElementById('ghost');
+function displayGhost(elementId) {
+  let ghost = document.createElement('div');
+  ghost.classList.add('ghost');
+  ghost.id.add(elementId);
   ghost.style.display = 'inline-block';
   ghost.style.left = `${ghostObj.x * 50}px`;
   ghost.style.top = `${ghostObj.y * 50}px`;
 }
-function displayPacman() {
-  let pacman = document.getElementById('pacman');
-  pacman.style.left = `${pacmanObject.x * 50}px`;
-  pacman.style.top = `${pacmanObject.y * 50}px`;
-}
-function displayCherry() {
-  let cherry = document.getElementById('cherry');
-  cherry.style.left = `${cherry.x * 50}px`;
-  cherry.style.top = `${cherry.y * 50}px`;
-}
+let movingObject = [];
+let ghost1 = new GhostObj(5, 1, 'right', 1);
+let ghost2 = new GhostObj(7, 1, 'left', 1);
 
-function displayLives() {
-  document.getElementById('lives').textContent = lives;
-}
-function displayScore() {
-  document.getElementById('score').textContent = score;
-  if (score > 10 && objectArray.includes(cherry)) {
-    cherry.style.display = 'inline-block';
-    objectArray.pop();
-    displayGhost();
-  }
-}
-function pacmanCollision(elementX, elementY) {
-  let pacman = document.getElementById('pacman');
-  collisionWithWall(pacmanObject, pacman.id, elementX, elementY);
-  collisionWithFruit(pacmanObject, pacman.id);
-  collisionWithCoin(pacmanObject, pacman.id);
-  collisionWithGhost(pacmanObject, pacman.id, elementX, elementY);
-}
-function ghostCollision(elementX, elementY) {
-  let ghost = document.getElementById('ghost');
+movingObject.push(ghost1);
+movingObject.push(ghost2);
+setInterval(() => moveObject(movingObject), 3000);
 
-  return collisionWithWall(ghostObj, ghost.id, elementX, elementY);
-}
-
-function collisionWithWall(element, id, elementX, elementY) {
-  let tempX = elementX;
-  let tempY = elementY;
-  if (world[element.y][element.x] === 2) {
-    element.x = tempX;
-    element.y = tempY;
-    console.log(id, 'Ran into Wall');
-    return true;
-  } else {
-    return false;
-  }
-}
-function collisionWithCoin(element, id) {
-  if (world[element.y][element.x] === 1) {
-    world[element.y][element.x] = 0;
-    score += 10;
-    displayWorld();
-    displayScore();
-    console.log(id, 'Ate a Coin');
-  }
-}
-function collisionWithFruit(element, id) {
-  if (element.y === cherryObject.y && element.x === cherryObject.x) {
-    cherryObject.y = undefined;
-    cherryObject.x = undefined;
-    let object = document.getElementById(`cherry`);
-    object.remove();
-    object.style.display = 'none';
-    score += 50;
-    console.log(id, 'Ate a Cherry');
-  }
-}
-function collisionWithGhost(
-  elementOne,
-  elementOneId,
-  elementTwo,
-  elementTwoId
-) {
-  if (elementOne.y === elementTwo.y && element.x === elementTwo.x) {
-    let element = document.getElementById(`${elementOneId}`);
-    element.remove();
-    lives--;
-    displayLives();
-    console.log('Lost a Life');
-  }
-}
-setInterval(moveGhost, 200);
-
-function moveGhost() {
-  displayGhost();
-  let corners = {
-    down: [world[ghostObj.y + 1][ghostObj.x] !== 2, 'down'],
-    up: [world[ghostObj.y - 1][ghostObj.x] !== 2, 'up'],
-    right: [world[ghostObj.y][ghostObj.x + 1] !== 2, 'right'],
-    left: [world[ghostObj.y][ghostObj.x - 1] !== 2, 'left'],
-  };
-  let directions = [];
-  let cornerCount = 0;
-  for (direction in corners) {
-    if (corners[direction][0] === true) {
-      directions.push(corners[direction][1]);
-      cornerCount++;
+function moveObject(object) {
+  for (objectInstance of object) {
+    let directions = [];
+    let cornerCount = 0;
+    switch (objectInstance.class) {
+      case 'ghost':
+        displayGhost(objectInstance.id);
+        break;
+      case 'pacman':
+        displayPacman();
+        break;
+      case 'fruit':
+        displayCherry();
+        break;
     }
-  }
-  console.log(cornerCount);
-  if (cornerCount > 2) {
-    let randomDirection = Math.floor(
-      Math.floor(Math.random() * directions.length)
-    );
-    ghostObj.direction = directions[randomDirection];
-  }
-  if (corners[ghostObj.direction][0]) {
-    switch (ghostObj.direction) {
+    let corners = [
+      [world[objectInstance.y + 1][objectInstance.x] !== 2, 'down'],
+      [world[objectInstance.y - 1][objectInstance.x] !== 2, 'up'],
+      [world[objectInstance.y][objectInstance.x + 1] !== 2, 'right'],
+      [world[objectInstance.y][objectInstance.x - 1] !== 2, 'left'],
+    ];
+
+    for (let direction of corners) {
+      if (direction[0] === true) {
+        directions.push(direction[1]);
+        cornerCount++;
+      }
+    }
+    console.log(directions);
+    if (!directions.includes(objectInstance.direction)) {
+      let randomDirection = Math.floor(Math.random() * directions.length);
+      console.log(directions.length);
+      objectInstance.direction = directions[randomDirection];
+    }
+    switch (objectInstance.direction) {
       case 'right':
-        ghostObj.x += ghostObj.ghostSpeed;
+        objectInstance.x += objectInstance.speed;
         break;
       case 'left':
-        ghostObj.x -= ghostObj.ghostSpeed;
+        objectInstance.x -= objectInstance.speed;
         break;
       case 'up':
-        ghostObj.y -= ghostObj.ghostSpeed;
+        objectInstance.y -= objectInstance.speed;
         break;
       case 'down':
-        ghostObj.y += ghostObj.ghostSpeed;
+        objectInstance.y += objectInstance.speed;
         break;
     }
-  } else {
-    let randomDirection = Math.floor(
-      Math.floor(Math.random() * directions.length)
-    );
-    ghostObj.direction = directions[randomDirection];
+    cornerCount = 0;
   }
-  cornerCount = 0;
 }
 
-document.addEventListener('keydown', (e) => {
-  let tempX = pacmanObject.x;
-  let tempY = pacmanObject.y;
-  if (e.key === 'ArrowLeft') {
-    pacman.style.transform = 'rotate(180deg)';
-    pacmanObject.x--;
-  } else if (e.key === 'ArrowRight') {
-    pacman.style.transform = 'rotate(0deg)';
-    pacmanObject.x++;
-  } else if (e.key === 'ArrowUp') {
-    pacman.style.transform = 'rotate(270deg)';
-    pacmanObject.y--;
-  } else if (e.key === 'ArrowDown') {
-    pacman.style.transform = 'rotate(90deg)';
-    pacmanObject.y++;
-  }
-  pacmanCollision(tempX, tempY);
-  console.log(world[pacmanObject.y][pacmanObject.x]);
-  displayPacman();
-});
-
 displayWorld();
-displayPacman();

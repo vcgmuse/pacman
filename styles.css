@@ -42,8 +42,9 @@ div#pacman{
     position: absolute;
     top: 0px;
     left: 0px;
+
 }
-div#ghost{
+div.ghost{
     display: none;
     background: url('./images/ghost.png');
     background-size: contain;
@@ -63,7 +64,11 @@ div#cherry{
     position: absolute;
     top: 0px;
     left: 0px;
+    animation-name: bouningObject;
+    transition: all 300ms linear;
+
 }
+
 
 div#lives {
     display: flex;
